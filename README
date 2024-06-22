@@ -1,4 +1,4 @@
-# hyprland-dotfiles
+#hyprland-dotfiles
 
 This is the Hyprland section of the ML4W dotfiles (https://gitlab.com/stephan-raabe/dotfiles), featuring my personal modifications. The only thing that my be of interest is that I have added a keybinding (SUPER + O) that triggers a bash script to toggle opacity on and off. This script is located at ~/dotfiles/hypr/scripts/toggle_opacity.sh.
 
