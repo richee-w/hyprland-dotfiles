@@ -1,0 +1,40 @@
+#!/usr/bin/python3
+import re
+
+def extract_keybindings(conf_path):
+    with open(conf_path, 'r') as file:
+        conf_content = file.read()
+
+    # Regular expression to match sections and keybindings
+    section_pattern = re.compile(r'###\s*(.+?)\n(.*?)(?=\n#|$)', re.DOTALL)
+    keybinding_pattern = re.compile(r'^bind\s*=\s*(.+)', re.MULTILINE)
+
+    sections = section_pattern.findall(conf_content)
+    keybindings = {}
+
+    for section in sections:
+        section_name, section_content = section
+        section_bindings = keybinding_pattern.findall(section_content)
+        section_bindings = [binding.replace('$mainMod', 'SUPER') for binding in section_bindings]
+        keybindings[section_name.strip()] = section_bindings
+
+    return keybindings
+
+def write_to_markdown(keybindings, markdown_path):
+    with open(markdown_path, 'w') as md_file:
+        md_file.write("# Hyprland Keybindings\n\n")
+        for section, bindings in keybindings.items():
+            md_file.write(f"## {section}\n")
+            for binding in bindings:
+                md_file.write(f"- `{binding}`\n")
+            md_file.write("\n")
+
+# Path to the hyprland.conf file
+conf_path = '/home/rich/.config/hypr/hyprland.conf'
+# Path where you want to save the markdown file
+markdown_path = '/home/rich/.config/hypr/cheatsheet.md'
+
+keybindings = extract_keybindings(conf_path)
+write_to_markdown(keybindings, markdown_path)
+
+print(f"Keybindings extracted to {markdown_path}")
